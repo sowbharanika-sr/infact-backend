@@ -40,7 +40,7 @@ app.post("/ask", (req, res) => {
   }
 
   /* ---------------- MOST SOLD PRODUCT ---------------- */
-  if (
+ /* if (
     question.includes("most sold") ||
     question.includes("sells the most")
   ) {
@@ -58,7 +58,7 @@ app.post("/ask", (req, res) => {
       answer: `The most sold product this month is ${top[0]}.`,
     });
   }
-
+*/
   /* ---------------- CHEAPEST PRODUCT ---------------- */
   if (question.includes("cheapest")) {
     const cheapest = data.reduce((a, b) =>
@@ -181,6 +181,87 @@ if (
     });
   }
 }
+ // --------------  TOTAL SALES OF PRODUCT---------
+if (question.includes("total sales of")) {
+  const product = question.replace("total sales of", "").trim();
+
+  const total = data
+    .filter(d => d.Product_Name.toLowerCase() === product)
+    .reduce((sum, d) => sum + d.Total_Sales, 0);
+
+  if (total > 0) {
+    return res.json({
+      answer: `Total sales of ${product} is ₹${total}.`,
+    });
+  }
+}
+//--------------TOTAL SALES ON DATE-----------------
+
+if (question.includes("sales on")) {
+  const date = question.replace("sales on", "").trim();
+
+  const total = data
+    .filter(d => d.Date === date)
+    .reduce((sum, d) => sum + d.Total_Sales, 0);
+
+  if (total > 0) {
+    return res.json({
+      answer: `Total sales on ${date} is ₹${total}.`,
+    });
+  }
+}
+//-------------TOTAL REVENUE----------
+if (
+  question.includes("total revenue") ||
+  question.includes("overall sales")
+) {
+  const revenue = data.reduce((sum, d) => sum + d.Total_Sales, 0);
+
+  return res.json({
+    answer: `The total revenue of the shop is ₹${revenue}.`,
+  });
+}
+//-------------WORST SALES DAY-----------
+if (
+  question.includes("worst sales day") ||
+  question.includes("lowest sales day")
+) {
+  const dateMap = {};
+
+  data.forEach(d => {
+    dateMap[d.Date] =
+      (dateMap[d.Date] || 0) + d.Total_Sales;
+  });
+
+  const worstDay = Object.entries(dateMap).reduce((a, b) =>
+    b[1] < a[1] ? b : a
+  );
+
+  return res.json({
+    answer: `The lowest sales occurred on ${worstDay[0]} with ₹${worstDay[1]}.`,
+  });
+}
+//--------------BEST SALES DAY---------------
+if (
+  question.includes("best sales day") ||
+  question.includes("highest revenue day")
+) {
+  const dateMap = {};
+
+  data.forEach(d => {
+    dateMap[d.Date] =
+      (dateMap[d.Date] || 0) + d.Total_Sales;
+  });
+
+  const bestDay = Object.entries(dateMap).reduce((a, b) =>
+    b[1] > a[1] ? b : a
+  );
+
+  return res.json({
+    answer: `The best sales day was ${bestDay[0]} with revenue ₹${bestDay[1]}.`,
+  });
+}
+
 
 
   /* ---------------- FALLBACK ---------------- */
