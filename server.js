@@ -107,7 +107,7 @@ app.post("/ask", (req, res) => {
     answer: `The product with the highest sales is ${topProduct[0]} with total sales of ₹${topProduct[1]}.`,
   });
 }
-
+//-------------AVERAGE SALES-----------
  if (question.includes("average sale")) {
   const totalSales = data.reduce((sum, d) => sum + d.Total_Sales, 0);
   const avgSale = (totalSales / data.length).toFixed(2);
@@ -116,6 +116,7 @@ app.post("/ask", (req, res) => {
     answer: `The average sale value is ₹${avgSale}.`,
   });
 }
+//-------------------TOTAL SALES--------------
 if (
   question.includes("total sales of each product") ||
   question.includes("sales of each product")
@@ -134,6 +135,7 @@ if (
 
   return res.json({ answer: response });
 }
+//---------------------NO OF PRODUCTS---------------
 if (
   question.includes("how many products") ||
   question.includes("total products") ||
