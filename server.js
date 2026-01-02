@@ -263,6 +263,23 @@ if (
     answer: `The best sales day was ${bestDay[0]} with revenue ₹${bestDay[1]}.`,
   });
 }
+// ---------------- LIST ALL PRODUCT NAMES ----------------
+if (
+  question.includes("list of products") ||
+  question.includes("names of products") ||
+  question.includes("name of the products") ||
+  question.includes("all products") ||
+  question.includes("products available")
+) {
+  const productNames = [
+    ...new Set(data.map(d => d.Product_Name))
+  ];
+
+  return res.json({
+    answer: `The available products are:\n${productNames.join(", ")}`,
+  });
+}
+
 
 
 
